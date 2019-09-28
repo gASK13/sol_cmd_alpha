@@ -43,12 +43,18 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
 
         this.body.setSize(44, 50, true);           
         
-        this.health = 100;
+        this.health = 10;
+        this.maxHealth = 10;
         
         this.weapons = [new WeaponDualLaser()];
         
         this.equipmentChanged();
     }        
+    
+    absorbDamage(damage) {
+        this.health -= damage;
+        return this.health > 0;
+    }
     
     equipmentChanged() {
         this.setDrag(this.getDrag()).setDamping(true).setMaxVelocity(this.getMaxSpeed());
@@ -72,6 +78,10 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
     
     getHealth() {
         return this.health;    
+    }
+    
+    getMaxHealth() {
+        return this.maxHealth;
     }
     
     fire(bullets, game) {

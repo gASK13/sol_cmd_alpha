@@ -1,8 +1,7 @@
 // IDEAS:
 // - display side bar (health / weapons)
-// - assteroids take health
 // - asteroids fast collisions break asteroids
-// - main menu 
+// - asteroids/player SLOW collisions just "nudge" player
 // - player deflector shield
 // - score
 // - coins
@@ -41,7 +40,7 @@ class Projectile extends Phaser.Physics.Arcade.Sprite{
     }
     
     update(time, delta) {
-        if (this.active && (this.x < 0 || this.x > 800 || this.y < 0)) {
+        if (this.active && (this.x < -100 || this.x > 900 || this.y < 0)) {
             this.setActive(false);
             this.setVisible(false);
         }
@@ -92,9 +91,9 @@ class Asteroid extends Phaser.Physics.Arcade.Sprite {
 // Mining scene
 class Mining extends Phaser.Scene {
     
-    onstructor()
+    constructor()
     {
-        Phaser.Scene.call(this, { key: 'mining' });
+        super({ key: 'mining'});
     };
     
     
@@ -119,6 +118,7 @@ class Mining extends Phaser.Scene {
     create()
     {
         // Set world bounds
+        this.physics.world.setBounds(0,0,800,600);
         this.physics.world.setBoundsCollision(true, true, true, true);
         
         // CREATE PLAYER
@@ -154,7 +154,13 @@ class Mining extends Phaser.Scene {
     }
     
     hitPlayer(player, ass) {
-        // na dah
+        if (player.absorbDamage(ass.health)) {
+            this.scene.get("mining-status").updateHealth(player.getHealth() / player.getMaxHealth());
+            ass.disableBody(true, true);
+        } else {
+            this.scene.stop("mining-status");
+            this.scene.start("menu");
+        }
     }
         
     update() {
@@ -186,3 +192,33 @@ class Mining extends Phaser.Scene {
         }
     }
 };
+
+
+class MiningStatus extends Phaser.Scene {
+    
+    constructor()
+    {
+        super({ key: 'mining-status' });
+    }
+    
+    preload() {
+        this.load.image('status_bck', 'assets/status.png');
+        this.load.image('health', 'assets/health.png');
+    }
+    
+    create() {
+        this.add.image(800, 0, 'status_bck').setOrigin(0,0);
+        this.healthBar = this.add.image(822, 62, 'health').setOrigin(0,0);
+    }
+    
+    update() {
+        
+    }
+    
+    updateHealth(percent) {
+        console.log(percent);
+                
+        this.healthBar.setCrop(0, 0, 156*percent, 16);
+    }
+    
+}
