@@ -1,5 +1,3 @@
-//import 'phaser';
-
 // IDEAS:
 // - ship class (FIRE, GET THRUST, GET MAX SPEED, GET DRAG, GET HEALTH
 // - display side bar (health / weapons)
