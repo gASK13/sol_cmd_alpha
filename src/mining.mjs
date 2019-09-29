@@ -22,13 +22,16 @@ var basicAssConfig = {
 
 class CoinPayout extends Phaser.Physics.Arcade.Sprite {
     constructor(scene) {
-        super(scene, 0, 0, "coin");        
+        super(scene, 0, 0, "coin");                 
+        this.anims.play('rotate');                                
     }
     
-    spawn(x, y) {
+    spawn(x, y) {        
+        this.anims.setProgress(Phaser.Math.RND.between(0,100) / 100);
+        this.anims.setTimeScale(Phaser.Math.RND.between(50,150) / 100);
         this.enableBody(true, x, y, true, true);
         this.body.setVelocity(Phaser.Math.RND.between(-50,50), Phaser.Math.RND.between(-15,85));
-        this.setDrag(0.98).setDamping(true)        
+        this.setDrag(0.98).setDamping(true)                
     }
     
     collect(ship, player) {
@@ -161,7 +164,7 @@ export class Mining extends Phaser.Scene {
         this.load.spritesheet("coin", "assets/coin.png", {
             frameWidth: 16,
             frameHeight: 16
-        });
+        });                               
         
         // LOAD LSR
         this.load.image('laser', 'assets/lsr.png');
@@ -215,7 +218,16 @@ export class Mining extends Phaser.Scene {
         // CATCH INPUT
         this.cursors = this.input.keyboard.createCursorKeys();
         this.input.keyboard.addCapture(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        this.input.keyboard.addCapture(Phaser.Input.Keyboard.KeyCodes.SHIFT);             
+        this.input.keyboard.addCapture(Phaser.Input.Keyboard.KeyCodes.SHIFT);
+        
+        // Anims
+        this.anims.create({
+            key: 'rotate',
+            frames: this.anims.generateFrameNumbers('coin', { start: 0, end: 7, first: 0 }),
+            frameRate: 30,
+            repeat: -1,
+            repeatDelay: 0
+        });             
     }
     
     hitAss(bullet, ass) {
