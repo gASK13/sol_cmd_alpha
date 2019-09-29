@@ -1,5 +1,7 @@
+import {Player} from './player.mjs';
+
 // Mining scene
-class Menu extends Phaser.Scene {
+export class Menu extends Phaser.Scene {
     
     constructor()
     {
@@ -51,7 +53,7 @@ class Menu extends Phaser.Scene {
     
     startGame() {
         // this is the button :(
-        this.scene.scene.start("mining");
+        this.scene.scene.start("mining", { player: new Player(0) });
         this.scene.scene.launch("mining-status");
     }
            

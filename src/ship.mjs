@@ -25,7 +25,7 @@ class WeaponDualLaser extends Weapon {
     }                     
 };
 
-class Ship extends Phaser.Physics.Arcade.Sprite {
+export class Ship extends Phaser.Physics.Arcade.Sprite {
     
     constructor(scene, x, y) {
         super(scene, x, y, 'ships');
@@ -45,7 +45,6 @@ class Ship extends Phaser.Physics.Arcade.Sprite {
         
         this.health = 8;
         this.maxHealth = 8;
-        this.credits = 0;
         
         this.maxShield = 8;
         this.shield = 8;

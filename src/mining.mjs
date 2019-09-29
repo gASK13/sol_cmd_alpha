@@ -1,3 +1,5 @@
+import {Ship} from './ship.mjs';
+
 var basicAssConfig = {
     stages: [
         {
@@ -29,7 +31,7 @@ class CoinPayout extends Phaser.Physics.Arcade.Sprite {
         this.setDrag(0.98).setDamping(true)        
     }
     
-    collect(player) {
+    collect(ship, player) {
         player.credits += 1;
         this.disableBody(true, true);
     }
@@ -139,11 +141,11 @@ class Asteroid extends Phaser.Physics.Arcade.Sprite {
 // Assteroid class
 
 // Mining scene
-class Mining extends Phaser.Scene {
+export class Mining extends Phaser.Scene {
     
     constructor()
     {
-        super({ key: 'mining'});
+        super({ key: 'mining'});        
     };
     
     
@@ -171,15 +173,18 @@ class Mining extends Phaser.Scene {
         this.load.image('ass_3', 'assets/ass_3.png');
     }
     
-    create()
+    create(config)
     {
+        // Config
+        this.player = config.player;
+        
         // Set world bounds
         this.physics.world.setBounds(0,0,800,600);
         this.physics.world.setBoundsCollision(true, true, true, true);
         
         // CREATE PLAYER
-        this.player = new Ship(this, 400, 500);
-        this.player.setCollideWorldBounds(true);        
+        this.pShip = new Ship(this, 400, 500);
+        this.pShip.setCollideWorldBounds(true);        
         
         // BULLETS
         this.pBullets = this.physics.add.group({
@@ -203,8 +208,8 @@ class Mining extends Phaser.Scene {
         });
         
         this.physics.add.collider(this.pBullets, this.asteroids, null, this.hitAss, this);
-        this.physics.add.collider(this.player, this.asteroids, this.hitPlayer, null, this);
-        this.physics.add.collider(this.player, this.coins, null, this.collect, this);
+        this.physics.add.collider(this.pShip, this.asteroids, this.hitPlayer, null, this);
+        this.physics.add.collider(this.pShip, this.coins, null, this.collect, this);
         this.physics.add.collider(this.asteroids, this.asteroids, null, null, this);
         
         // CATCH INPUT
@@ -218,15 +223,15 @@ class Mining extends Phaser.Scene {
         return false;
     }
     
-    collect(player, coin) {
-        coin.collect(player);
-        this.scene.get("mining-status").updateCoins(player.credits);
+    collect(ship, coin) {
+        coin.collect(ship, this.player);
+        this.scene.get("mining-status").updateCoins(this.player.credits);
         return false;
     }
     
-    hitPlayer(player, ass) {
-        if (player.absorbDamage(ass.health)) {
-            this.scene.get("mining-status").updateHealth(this.player);
+    hitPlayer(ship, ass) {
+        if (ship.absorbDamage(ass.health)) {
+            this.scene.get("mining-status").updateHealth(ship);
             ass.applyDamage(null, this);
         } else {
             this.scene.stop("mining-status");
@@ -235,26 +240,26 @@ class Mining extends Phaser.Scene {
     }
         
     update() {
-        this.player.update()
+        this.pShip.update()
         
         // HANDLE PLAYER MOVEMENT
-        this.player.setAccelerationY(0);
-        this.player.setAccelerationX(0);
+        this.pShip.setAccelerationY(0);
+        this.pShip.setAccelerationX(0);
         
         if (this.cursors.up.isDown) {
-            this.player.setAccelerationY(-this.player.getThrust());
+            this.pShip.setAccelerationY(-this.pShip.getThrust());
         } else if (this.cursors.down.isDown) {
-            this.player.setAccelerationY(this.player.getThrust());
+            this.pShip.setAccelerationY(this.pShip.getThrust());
         }    
         if (this.cursors.left.isDown) {
-            this.player.setAccelerationX(-this.player.getThrust());
+            this.pShip.setAccelerationX(-this.pShip.getThrust());
         } else if (this.cursors.right.isDown) {
-            this.player.setAccelerationX(this.player.getThrust());
+            this.pShip.setAccelerationX(this.pShip.getThrust());
         }
         
         // HANDLE SHOOTING
         if (this.cursors.space.isDown) {
-            this.player.fire(this.pBullets);
+            this.pShip.fire(this.pBullets);
         }
         
         // SPAWN ASTEROIDS
@@ -267,7 +272,7 @@ class Mining extends Phaser.Scene {
 };
 
 
-class MiningStatus extends Phaser.Scene {
+export class MiningStatus extends Phaser.Scene {
     
     constructor()
     {
@@ -296,8 +301,8 @@ class MiningStatus extends Phaser.Scene {
         this.credits.setText("Credits: " + coins);
     }
     
-    updateHealth(player) {
-        this.healthBar.setCrop(0, 0, 156*(player.health / player.maxHealth), 16);
-        this.shieldBar.setCrop(0, 0, 156*(player.shield / player.maxShield), 16);
+    updateHealth(ship) {
+        this.healthBar.setCrop(0, 0, 156*(ship.health / ship.maxHealth), 16);
+        this.shieldBar.setCrop(0, 0, 156*(ship.shield / ship.maxShield), 16);
     }        
 }
