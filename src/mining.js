@@ -1,28 +1,53 @@
-// IDEAS:
-// - display side bar (health / weapons)
-// - asteroids fast collisions break asteroids
-// - asteroids/player SLOW collisions just "nudge" player
-// - player deflector shield
-// - score
-// - coins
-// variable thrust ("FLAMEON")
-
 var basicAssConfig = {
     stages: [
         {
             key: "ass_1",
-            health: 1
+            health: 2,
+            payout: [{ type: "coin", min: 1, max: 3}]
         },
         {   
             key: "ass_2",
-            health: 3
+            health: 6,
+            payout: [{ type: "coin", min: 1, max: 2}]
         },
         {
             key: "ass_3",
-            health: 6
+            health: 12,
+            payout: [{ type: "coin", min: 1, max: 1}]
         }
     ]
 };
+
+class CoinPayout extends Phaser.Physics.Arcade.Sprite {
+    constructor(scene) {
+        super(scene, 0, 0, "coin");        
+    }
+    
+    spawn(x, y) {
+        this.enableBody(true, x, y, true, true);
+        this.body.setVelocity(Phaser.Math.RND.between(-50,50), Phaser.Math.RND.between(-15,85));
+        this.setDrag(0.98).setDamping(true)        
+    }
+    
+    collect(player) {
+        player.credits += 1;
+        this.disableBody(true, true);
+    }
+    
+    update(time, delta) {
+        if (this.body.velocity.x == 0 && this.body.velocity.y < 20 && this.body.velocity.y >= 0) {
+            this.setDrag(0);
+        }
+        
+        if (this.body.velocity.y >= 0 && this.body.velocity.y < 20) {
+            this.setAccelerationY(1);
+        }
+        
+        if (this.body.velocity.y >= 20) {
+            this.setAccelerationY(0);
+        }
+    }
+}
 
 // Bullet class
 class Projectile extends Phaser.Physics.Arcade.Sprite{
@@ -41,8 +66,7 @@ class Projectile extends Phaser.Physics.Arcade.Sprite{
     
     update(time, delta) {
         if (this.active && (this.x < -100 || this.x > 900 || this.y < 0)) {
-            this.setActive(false);
-            this.setVisible(false);
+            this.disableBody(true, true);
         }
     }        
 };
@@ -59,7 +83,8 @@ class Asteroid extends Phaser.Physics.Arcade.Sprite {
         this.enableBody(true, x, y, true, true);    
         this.setVelocity(vx/(stage+1), vy/(stage+1));
         this.setAngularVelocity(rot/(stage+1));
-        this.health = this.config.stages[stage].health;        
+        this.health = this.config.stages[stage].health;
+        this.payout = this.config.stages[stage].payout;         
     }
     
     switchStage(stage) {
@@ -70,18 +95,43 @@ class Asteroid extends Phaser.Physics.Arcade.Sprite {
     
     update(time, delta) {
         if (this.active && (this.y > 700 || this.x > 1000 || this.x < -200 || this.y < -200)) {
-            this.setActive(false);
-            this.setVisible(false);
+            this.disableBody(true, true);
         }
     }
     
-    applyDamage(bullet) {
-        this.health -= bullet.damage;
-        bullet.disableBody(true, true);
-        if (this.health < 0) {
-            this.disableBody(true, true);
+    applyDamage(bullet, scene) {
+        if (bullet) {
+            this.health -= bullet.damage;
+            bullet.disableBody(true, true);
+        } else {
+            this.health = 0;
+        }
+        
+        if (this.health <= 0) {           
+            this.spawnPayout(scene, 0); 
+            this.disableBody(true, true);                                    
         } else if (this.stage > 0 && this.config.stages[this.stage - 1].health > this.health) {
-            this.switchStage(this.stage - 1);
+            for(let i = 0; i < this.stage; i++) {
+                if (this.config.stages[i].health > this.health) {            
+                    this.spawnPayout(scene, i);
+                    this.switchStage(i);    
+                    return;
+                }
+            }        
+        }        
+    }
+    
+    spawnPayout(scene, toStage) {
+        for (let i = toStage; i <= this.stage; i++) {
+            for (let payout of this.config.stages[i].payout) {
+                if(payout.type == 'coin') {
+                    let amount = Phaser.Math.RND.between(payout.min, payout.max);
+                    for (let i = 0; i < amount; i++) {
+                        let coin = scene.coins.get();
+                        coin.spawn(this.x, this.y);
+                    }
+                }
+            }        
         }
     }
 };
@@ -103,6 +153,12 @@ class Mining extends Phaser.Scene {
         this.load.spritesheet('ships', 'assets/ships.png', {
     	   frameWidth: 66,
     	   frameHeight: 66
+        });
+        
+        // Coins
+        this.load.spritesheet("coin", "assets/coin.png", {
+            frameWidth: 16,
+            frameHeight: 16
         });
         
         // LOAD LSR
@@ -128,18 +184,27 @@ class Mining extends Phaser.Scene {
         // BULLETS
         this.pBullets = this.physics.add.group({
             classType: Projectile,
-            maxSize: 50,
+            maxSize: 150,
             runChildUpdate: true
         });
         
         // ASTEROIDS
         this.asteroids = this.physics.add.group({
             classType: Asteroid,
-            maxSize: 50,
+            maxSize: 150,
             runChildUpdate: true
         });
+        
+        // ASTEROIDS
+        this.coins = this.physics.add.group({
+            classType: CoinPayout,
+            maxSize: 150,
+            runChildUpdate: true
+        });
+        
         this.physics.add.collider(this.pBullets, this.asteroids, null, this.hitAss, this);
         this.physics.add.collider(this.player, this.asteroids, this.hitPlayer, null, this);
+        this.physics.add.collider(this.player, this.coins, null, this.collect, this);
         this.physics.add.collider(this.asteroids, this.asteroids, null, null, this);
         
         // CATCH INPUT
@@ -149,14 +214,20 @@ class Mining extends Phaser.Scene {
     }
     
     hitAss(bullet, ass) {
-        ass.applyDamage(bullet);
+        ass.applyDamage(bullet, this);
+        return false;
+    }
+    
+    collect(player, coin) {
+        coin.collect(player);
+        this.scene.get("mining-status").updateCoins(player.credits);
         return false;
     }
     
     hitPlayer(player, ass) {
         if (player.absorbDamage(ass.health)) {
-            this.scene.get("mining-status").updateHealth(player.getHealth() / player.getMaxHealth());
-            ass.disableBody(true, true);
+            this.scene.get("mining-status").updateHealth(this.player);
+            ass.applyDamage(null, this);
         } else {
             this.scene.stop("mining-status");
             this.scene.start("menu");
@@ -164,6 +235,8 @@ class Mining extends Phaser.Scene {
     }
         
     update() {
+        this.player.update()
+        
         // HANDLE PLAYER MOVEMENT
         this.player.setAccelerationY(0);
         this.player.setAccelerationX(0);
@@ -181,7 +254,7 @@ class Mining extends Phaser.Scene {
         
         // HANDLE SHOOTING
         if (this.cursors.space.isDown) {
-            this.player.fire(this.pBullets, this);
+            this.player.fire(this.pBullets);
         }
         
         // SPAWN ASTEROIDS
@@ -204,21 +277,27 @@ class MiningStatus extends Phaser.Scene {
     preload() {
         this.load.image('status_bck', 'assets/status.png');
         this.load.image('health', 'assets/health.png');
+        this.load.image('shield', 'assets/shield.png');
     }
     
     create() {
         this.add.image(800, 0, 'status_bck').setOrigin(0,0);
         this.healthBar = this.add.image(822, 62, 'health').setOrigin(0,0);
+        this.shieldBar = this.add.image(822, 90, 'shield').setOrigin(0,0);
+        
+        this.credits = this.add.text(820, 112, 'Credits: 0').setOrigin(0, 0).setFontSize(12);
     }
     
     update() {
         
     }
     
-    updateHealth(percent) {
-        console.log(percent);
-                
-        this.healthBar.setCrop(0, 0, 156*percent, 16);
+    updateCoins(coins) {
+        this.credits.setText("Credits: " + coins);
     }
     
+    updateHealth(player) {
+        this.healthBar.setCrop(0, 0, 156*(player.health / player.maxHealth), 16);
+        this.shieldBar.setCrop(0, 0, 156*(player.shield / player.maxShield), 16);
+    }        
 }
