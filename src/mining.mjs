@@ -225,13 +225,13 @@ export class Mining extends Phaser.Scene {
     
     collect(ship, coin) {
         coin.collect(ship, this.player);
-        this.scene.get("mining-status").updateCoins(this.player.credits);
+        this.scene.get("mining-status").update();
         return false;
     }
     
     hitPlayer(ship, ass) {
         if (ship.absorbDamage(ass.health)) {
-            this.scene.get("mining-status").updateHealth(ship);
+            this.scene.get("mining-status").update();
             ass.applyDamage(null, this);
         } else {
             this.scene.stop("mining-status");
@@ -285,24 +285,28 @@ export class MiningStatus extends Phaser.Scene {
         this.load.image('shield', 'assets/shield.png');
     }
     
-    create() {
+    create(config) {
+        this.player = config.player;
+        this.pShip = this.scene.get("mining").pShip;
+        
         this.add.image(800, 0, 'status_bck').setOrigin(0,0);
         this.healthBar = this.add.image(822, 62, 'health').setOrigin(0,0);
         this.shieldBar = this.add.image(822, 90, 'shield').setOrigin(0,0);
         
-        this.credits = this.add.text(820, 112, 'Credits: 0').setOrigin(0, 0).setFontSize(12);
+        this.credits = this.add.text(820, 112, 'Credits: ' + this.player.credits).setOrigin(0, 0).setFontSize(12);
     }
     
     update() {
-        
+        this.updateCoins();  
+        this.updateHealth();      
     }
     
-    updateCoins(coins) {
-        this.credits.setText("Credits: " + coins);
+    updateCoins() {
+        this.credits.setText("Credits: " + this.player.credits);
     }
     
-    updateHealth(ship) {
-        this.healthBar.setCrop(0, 0, 156*(ship.health / ship.maxHealth), 16);
-        this.shieldBar.setCrop(0, 0, 156*(ship.shield / ship.maxShield), 16);
+    updateHealth() {
+        this.healthBar.setCrop(0, 0, 156*(this.pShip.health / this.pShip.maxHealth), 16);
+        this.shieldBar.setCrop(0, 0, 156*(this.pShip.shield / this.pShip.maxShield), 16);
     }        
 }

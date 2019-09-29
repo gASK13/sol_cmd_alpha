@@ -1,3 +1,9 @@
+/*
+    Contains SHIP + WEAPON definition
+    
+    Will be split soon(ish) - when I figure out how I want to layout the code.
+    
+*/
 class Weapon {
     constructor(firerate, projectiles) {
         this.firerate = firerate;
@@ -80,7 +86,7 @@ export class Ship extends Phaser.Physics.Arcade.Sprite {
         if (this.scene.time.now > this.nextRecharge && this.shield < this.maxShield) {
             this.shield++;
             this.nextRecharge = this.scene.time.now + this.shieldRecharge;     
-            this.scene.scene.get("mining-status").updateHealth(this);    
+            this.scene.scene.get("mining-status").update();    
         }
     }
     

@@ -1,32 +1,15 @@
 import {Player} from './player.mjs';
 
-// Mining scene
+/*
+    Menu class - placeholder for now, so I can prove I can do it.
+*/
 export class Menu extends Phaser.Scene {
     
     constructor()
     {
         super({ key: 'menu' });
-    };
-    
-    
-    preload()
-    {
-        // LOAD PLAYER
-        this.load.spritesheet('ships', 'assets/ships.png', {
-    	   frameWidth: 66,
-    	   frameHeight: 66
-        });
-        
-        // LOAD LSR
-        this.load.image('laser', 'assets/lsr.png');
-        
-        // LOAD AS(S)
-        this.load.image('ass', 'assets/ass.png');
-        this.load.image('ass_1', 'assets/ass_1.png');
-        this.load.image('ass_2', 'assets/ass_2.png');
-        this.load.image('ass_3', 'assets/ass_3.png');
     }
-    
+            
     create()
     {
         var text = this.add.text(500, 100, 'SOL COMMAND');
@@ -53,11 +36,8 @@ export class Menu extends Phaser.Scene {
     
     startGame() {
         // this is the button :(
-        this.scene.scene.start("mining", { player: new Player(0) });
-        this.scene.scene.launch("mining-status");
-    }
-           
-    update() {
-        // TADAH!
-    }
+        let player = new Player(0);
+        this.scene.scene.start("mining", { player: player});
+        this.scene.scene.launch("mining-status", { player: player});
+    }           
 };
