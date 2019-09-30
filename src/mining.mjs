@@ -5,16 +5,19 @@ var basicAssConfig = {
         {
             key: "ass_1",
             health: 2,
+            mass: 0.3,
             payout: [{ type: "coin", min: 1, max: 3}]
         },
         {   
             key: "ass_2",
             health: 6,
+            mass: 0.8,
             payout: [{ type: "coin", min: 1, max: 2}]
         },
         {
             key: "ass_3",
             health: 12,
+            mass: 2,
             payout: [{ type: "coin", min: 1, max: 1}]
         }
     ]
@@ -90,12 +93,15 @@ class Asteroid extends Phaser.Physics.Arcade.Sprite {
         this.setAngularVelocity(rot/(stage+1));
         this.health = this.config.stages[stage].health;
         this.payout = this.config.stages[stage].payout;         
+        this.setBounce(1);
+        this.setMass(this.config.stages[stage].mass);
     }
     
     switchStage(stage) {
         this.stage = stage;
         this.setTexture(this.config.stages[stage].key);        
         this.body.setSize(this.frame.width, this.frame.height, true);
+        this.setMass(this.config.stages[stage].mass);
     }
     
     update(time, delta) {
@@ -187,7 +193,17 @@ export class Mining extends Phaser.Scene {
         
         // CREATE PLAYER
         this.pShip = new Ship(this, 400, 500);
-        this.pShip.setCollideWorldBounds(true);        
+        this.pShip.setCollideWorldBounds(true);
+        this.pShip.body.onWorldBounds = true;        
+        this.pShip.setMass(1);
+        this.pShip.setBounce(1);
+        let ps_closure = this.pShip;
+        this.physics.world.on('worldbounds', function(body){
+            if (body === ps_closure.body) {
+                if (body.x <= 0 || body.x >= 750) { body.setVelocity(0, body.velocity.y); }
+                if (body.y <= 0 || body.y >= 550) { body.setVelocity(body.velocity.x ,0); }
+            }
+        },this);
         
         // BULLETS
         this.pBullets = this.physics.add.group({

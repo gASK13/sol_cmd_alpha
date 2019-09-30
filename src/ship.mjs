@@ -99,7 +99,7 @@ export class Ship extends Phaser.Physics.Arcade.Sprite {
     }
     
     getDrag () {
-        return 0.95;
+        return 0.975;
     }
     
     fire(bullets) {
