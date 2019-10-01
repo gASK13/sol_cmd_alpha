@@ -220,6 +220,10 @@ class CoinPayout extends Phaser.Physics.Arcade.Sprite {
         if (this.body.velocity.y >= 20) {
             this.setAccelerationY(0);
         }
+
+        if (this.y > 700) {
+          this.disableBody(true, true);
+        }
     }
 }
 
@@ -231,11 +235,12 @@ class Projectile extends Phaser.Physics.Arcade.Sprite{
         this.damage;
     }
 
-    spawn(x, y, vx, vy, damage) {
+    spawn(x, y, vx, vy, damage, angle) {
         this.enableBody(true, x, y, true, true);
         this.body.setVelocity(vx, vy)
         this.body.setSize(1, 21, true);
         this.damage = damage;
+        this.setRotation(angle);
     }
 
     update(time, delta) {

@@ -16,18 +16,18 @@ export default {
   hardpoints: [
     {
       type: 'W',
-      x: -1,
-      y: 0,
-      maxclass: 2,
+      x: -90,
+      y: 50,
+      maxClass: 2,
       id: 'l_w',
       portX: -16,
       portY: -5
     },
     {
       type: 'W',
-      x: 1,
-      y: 0,
-      maxclass: 2,
+      x: 90,
+      y: 50,
+      maxClass: 2,
       id: 'r_w',
       portX: 16,
       portY: -5
@@ -35,15 +35,15 @@ export default {
     {
       type: 'W',
       x: 0,
-      y: -2,
-      maxclass: 1,
+      y: -110,
+      maxClass: 1,
       id: 'f_w',
       portX: 0,
       portY: -35
     },
     {
       x: 0,
-      y: -1,
+      y: -70,
       id: 'm'
     }
   ]

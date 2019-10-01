@@ -13,6 +13,10 @@ export class Hardpoint {
         return new Hardpoint(json);
     }
   }
+
+  get key() {
+    return 'h1';
+  }
 }
 
 export class WeaponHardpoint extends Hardpoint {
@@ -26,5 +30,9 @@ export class WeaponHardpoint extends Hardpoint {
 
   get angle() {
     return this._angle ? this._angle : 0;
+  }
+
+  get key() {
+    return 'w' + this.maxClass;
   }
 }

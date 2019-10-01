@@ -15,27 +15,27 @@ export default {
   hardpoints: [
     {
       type: 'W',
-      x: -1,
-      y: 0,
-      maxclass: 1,
+      x: -75,
+      y: 70,
+      maxClass: 1,
       id: 'l_w',
       portX: -14,
       portY: -5,
-      angle: -15
+      angle: -0.1
     },
     {
       type: 'W',
-      x: 1,
-      y: 0,
-      maxclass: 1,
+      x: 75,
+      y: 70,
+      maxClass: 1,
       id: 'r_w',
       portX: 14,
       portY: -5,
-      angle: 15
+      angle: 0.1
     },
     {
       x: 0,
-      y: -1,
+      y: 25,
       id: 'm'
     }
   ]

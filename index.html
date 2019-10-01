@@ -11,6 +11,7 @@
             import {MiningStatus} from './src/mining/mining.mjs';
             import {Menu} from './src/scenes/menu.mjs';
             import {Preload} from './src/scenes/preload.mjs';
+            import {ShipLayout} from './src/layout/layout.mjs';
 
             var config = {
                 type: Phaser.AUTO,
@@ -24,7 +25,7 @@
                         debug: false
                     }
                 },
-                scene: [Preload, Menu, Mining, MiningStatus]
+                scene: [Preload, ShipLayout, Menu, Mining, MiningStatus]
             };
 
             var game = new Phaser.Game(config);

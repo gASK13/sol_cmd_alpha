@@ -44,6 +44,11 @@ export class Preload extends Phaser.Scene {
 
     // Load configs
     this.configManager = new ConfigManager(this, this.loadingFinished);
+
+    // Load hardpoint images
+    this.load.image('w1', 'assets/w1.png');
+    this.load.image('w2', 'assets/w2.png');
+    this.load.image('h1', 'assets/h1.png');
   }
 
   loadingFinished(self) {
