@@ -239,7 +239,7 @@ export class Mining extends Phaser.Scene {
             ass.applyDamage(null, this);
         } else {
             this.scene.stop("mining-status");
-            this.scene.start("menu");
+            this.scene.start("menu", { configManager: this.configManager });
         }
     }
 
