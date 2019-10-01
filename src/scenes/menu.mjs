@@ -1,4 +1,4 @@
-import {Player} from './player.mjs';
+import {Player} from '../player.mjs';
 
 /*
     Menu class - placeholder for now, so I can prove I can do it.

@@ -1,7 +1,9 @@
-import { default as config } from '../config/config.js';
-import {ShipClass} from './shipClass.mjs';
+import { default as config } from '../../config/config.js';
+import {ShipClass} from './ships/shipClass.mjs';
 
 export class ConfigManager {
+  basePath = "../../config/";
+
   constructor(scene, callback) {
     this.ships = [];
     this.callback = callback;
@@ -14,7 +16,7 @@ export class ConfigManager {
   }
 
   loadShip(scene, ship) {
-    import('../config/ships/' + ship + '.js')
+    import(this.basePath + 'ships/' + ship + '.js')
     .then((module) => {
         let shipClass = new ShipClass(ship, module.default);
         this.loadSpritesheet(shipClass, scene);

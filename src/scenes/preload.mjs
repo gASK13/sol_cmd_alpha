@@ -1,4 +1,4 @@
-import {ConfigManager} from './configManager.mjs';
+import {ConfigManager} from '../config/configManager.mjs';
 
 export class Preload extends Phaser.Scene {
   constructor() {
