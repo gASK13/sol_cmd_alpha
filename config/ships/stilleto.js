@@ -11,5 +11,32 @@ export default {
     image: "assets/stilleto.png",
     width: 44,
     height: 56
-  }
+  },
+  hardpoints: [
+    {
+      type: 'W',
+      x: -1,
+      y: 0,
+      maxclass: 1,
+      id: 'l_w',
+      portX: -14,
+      portY: -5,
+      angle: -15
+    },
+    {
+      type: 'W',
+      x: 1,
+      y: 0,
+      maxclass: 1,
+      id: 'r_w',
+      portX: 14,
+      portY: -5,
+      angle: 15
+    },
+    {
+      x: 0,
+      y: -1,
+      id: 'm'
+    }
+  ]
 }

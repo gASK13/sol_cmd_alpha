@@ -33,11 +33,12 @@ export class Menu extends Phaser.Scene {
         let sy = 400;
         let self = this;
         for (let shp of this.configManager.ships) {
-            this.add.sprite(sx, sy, shp.getSpriteKey()).setInteractive().on("pointerup", function() {
-                let player = new Player(0);
-                self.scene.start("mining", { player: player, configManager: self.configManager, shipClass: shp});
+            this.add.sprite(sx, sy, shp.key).setInteractive().on("pointerup", function() {
+                let player = new Player(0, shp);
+                self.scene.start("mining", { player: player, configManager: self.configManager});
                 self.scene.launch("mining-status", { player: player, configManager: self.configManager});
             });
+            this.add.text(sx, sy+50, shp.name).setOrigin(0.5,0.5).setFontSize(15).setColor("white");
             sx += 100
         }
     }

@@ -33,27 +33,27 @@ class WeaponDualLaser extends Weapon {
 
 export class Ship extends Phaser.Physics.Arcade.Sprite {
 
-    constructor(shipClass, scene, x, y) {
-        super(scene, x, y, shipClass.getSpriteKey());
-        this.shipClass = shipClass;
+    constructor(shipInstance, scene, x, y) {
+        super(scene, x, y, shipInstance.key);
+        this.shipInstance = shipInstance;
         scene.physics.add.existing(this);
         scene.add.existing(this);
 
         scene.anims.create({
-            key: shipClass.getSpriteKey() + 'burn',
-            frames: scene.anims.generateFrameNumbers(shipClass.getSpriteKey()),
+            key: shipInstance.key + 'burn',
+            frames: scene.anims.generateFrameNumbers(shipInstance.key),
             frameRate: 30,
             repeat: -1,
             repeatDelay: 0
         });
 
-        this.anims.play(shipClass.getSpriteKey() + 'burn');
+        this.anims.play(shipInstance.key + 'burn');
 
-        this.body.setSize(shipClass.getWidth(), shipClass.getHeight(), true);
+        this.body.setSize(shipInstance.width, shipInstance.height, true);
 
-        this.health = shipClass.getMaxHealth();
+        this.health = shipInstance.maxHealth;
 
-        this.shield = shipClass.getMaxShield();
+        this.shield = shipInstance.maxShield;
 
         this.weapons = [new WeaponDualLaser()];
 
@@ -66,7 +66,7 @@ export class Ship extends Phaser.Physics.Arcade.Sprite {
         if (this.shield > 0) {
             dmg -= this.shield;
             this.shield = dmg < 0 ? -dmg : 0;
-            this.nextRecharge = this.scene.time.now + (this.shield == 0 ? this.shipClass.getShieldRestart() : this.shipClass.getShieldRecharge());
+            this.nextRecharge = this.scene.time.now + (this.shield == 0 ? this.shipInstance.shieldRestart : this.shipInstance.shieldRecharge);
         }
 
         if (dmg > 0) {
@@ -77,35 +77,27 @@ export class Ship extends Phaser.Physics.Arcade.Sprite {
     }
 
     equipmentChanged() {
-        this.setDrag(this.getDrag()).setDamping(true).setMaxVelocity(this.getMaxSpeed());
+        this.setDrag(0.975).setDamping(true).setMaxVelocity(this.shipInstance.maxSpeed);
     }
 
     update(time, delta) {
-        if (this.scene.time.now > this.nextRecharge && this.shield < this.shipClass.getMaxShield()) {
+        if (this.scene.time.now > this.nextRecharge && this.shield < this.shipInstance.maxShield) {
             this.shield++;
-            this.nextRecharge = this.scene.time.now + this.shipClass.getShieldRecharge();
+            this.nextRecharge = this.scene.time.now + this.shipInstance.shieldRecharge;
             this.scene.scene.get("mining-status").update();
         }
     }
 
-    getThrust() {
-        return this.shipClass.getThrust();
+    get maxHealth() {
+      return this.shipInstance.maxHealth;
     }
 
-    getMaxSpeed() {
-        return this.shipClass.getMaxSpeed();
+    get maxShield() {
+      return this.shipInstance.maxShield;
     }
 
-    getMaxHealth() {
-      return this.shipClass.getMaxHealth();
-    }
-
-    getMaxShield() {
-      return this.shipClass.getMaxShield();
-    }
-
-    getDrag () {
-        return 0.975;
+    get thrust() {
+      return this.shipInstance.thrust;
     }
 
     fire(bullets) {

@@ -1,7 +1,11 @@
+import {Hardpoint} from './hardpoints.mjs';
+
 export class ShipClass {
 
   constructor(key, json) {
     this.key = "ship_" + key;
+
+    // Load data
     this.maxHealth = json.maxHealth;
     this.thrust = json.thrust;
     this.maxSpeed = json.maxSpeed;
@@ -11,56 +15,32 @@ export class ShipClass {
     this.name = json.name;
     this.description = json.description;
 
+    // Load hitboc - TODO refactor!
+    this.hitbox = json.hitbox;
+
+    // Load sprite - TODO refactor!
     this.sprite = json.sprite;
+
+    // Load hardpoints
+    if (json.hardpoints) {
+      this.hardpoints = [];
+      for(let hardpoint of json.hardpoints) {
+        this.hardpoints.push(Hardpoint.create(hardpoint));
+      }
+    }
   }
 
-  getSpriteKey() {
-    return this.key;
-  }
-
-  getWidth() {
-    if (this.sprite.hitbox) {
-      return this.sprite.hitbox.width;
+  get width() {
+    if (this.hitbox) {
+      return this.hitbox.width;
     }
     return this.sprite.width;
   }
 
-  getHeight() {
-    if (this.sprite.hitbox) {
-      return this.sprite.hitbox.height;
+  get height() {
+    if (this.hitbox) {
+      return this.hitbox.height;
     }
     return this.sprite.height;
-  }
-
-  getMaxHealth() {
-    return this.maxHealth;
-  }
-
-  getThrust() {
-    return this.thrust;
-  }
-
-  getMaxSpeed() {
-    return this.maxSpeed;
-  }
-
-  getMaxShield() {
-    return this.maxShield;
-  }
-
-  getShieldRecharge() {
-    return this.shieldRecharge;
-  }
-
-  getShieldRestart() {
-    return this.shieldRestart;
-  }
-
-  getName() {
-    return this.name;
-  }
-
-  getDescription() {
-    return this.description;
   }
 }
