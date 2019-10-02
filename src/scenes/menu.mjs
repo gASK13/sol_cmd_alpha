@@ -34,7 +34,8 @@ export class Menu extends Phaser.Scene {
         let self = this;
         for (let shp of Object.values(this.configManager.ships)) {
             this.add.sprite(sx, sy, shp.key).setInteractive().on("pointerup", function() {
-                let player = new Player(0, shp);
+                let player = new Player(0, shp,
+                  [self.configManager.weapons['laser_s'], self.configManager.weapons['laser_s'], self.configManager.weapons['laser_s'], self.configManager.weapons['laser_m'], self.configManager.weapons['laser_m']]);
                 self.scene.start("layout", { player: player, configManager: self.configManager});
             });
             this.add.text(sx, sy+50, shp.name).setOrigin(0.5,0.5).setFontSize(15).setColor("white");

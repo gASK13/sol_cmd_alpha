@@ -5,6 +5,7 @@ export class Weapon {
     this.id = json.id;
     this.name = json.name;
     this.description = json.description;
+    this.class = json.class;
     this.loadProjectiles(this.id, json);
 
     //TODO

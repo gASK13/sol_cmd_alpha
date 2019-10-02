@@ -29,7 +29,7 @@ export class ConfigManager {
         for(var projClass of wpClass.projectiles) {
           this.loadSpritesheet(projClass, scene);
         }
-        this.weapons[weapon] = wpClass;
+        this.weapons[wpClass.id] = wpClass;
         this.loading--;
         this.checkIfDone(scene);
     });
@@ -64,7 +64,6 @@ export class ConfigManager {
   checkIfDone(scene) {
     if (this.loading <= 0) {
       this.callback(scene);
-      console.log(this);
     }
   }
 }

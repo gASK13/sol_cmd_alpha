@@ -7,8 +7,9 @@ import {ShipInstance} from './shipInstance.mjs';
     In future, here will be also information about base you have in some efficient way.
 */
 export class Player {
-    constructor(credits, shipClass) {
+    constructor(credits, shipClass, inventory) {
         this.credits = credits;
-        this.shipInstance = new ShipInstance(shipClass);          
+        this.shipInstance = new ShipInstance(shipClass);
+        this.inventory = inventory;
     }
 }
