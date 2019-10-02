@@ -1,3 +1,4 @@
+import {ProjectileInstance} from './projectile.mjs';
 import {Ship} from './ship.mjs';
 
 // Mining scene
@@ -34,7 +35,7 @@ export class Mining extends Phaser.Scene {
 
         // BULLETS
         this.pBullets = this.physics.add.group({
-            classType: Projectile,
+            classType: ProjectileInstance,
             maxSize: 150,
             runChildUpdate: true
         });
@@ -227,29 +228,6 @@ class CoinPayout extends Phaser.Physics.Arcade.Sprite {
     }
 }
 
-// Bullet class
-class Projectile extends Phaser.Physics.Arcade.Sprite{
-
-    constructor(scene) {
-        super(scene, 0, 0, 'laser');
-        this.damage;
-    }
-
-    spawn(x, y, vx, vy, damage, angle) {
-        this.enableBody(true, x, y, true, true);
-        this.body.setVelocity(vx, vy)
-        this.body.setSize(1, 21, true);
-        this.damage = damage;
-        this.setRotation(angle);
-    }
-
-    update(time, delta) {
-        if (this.active && (this.x < -100 || this.x > 900 || this.y < 0)) {
-            this.disableBody(true, true);
-        }
-    }
-};
-
 class Asteroid extends Phaser.Physics.Arcade.Sprite {
 
     constructor(scene) {
@@ -283,7 +261,7 @@ class Asteroid extends Phaser.Physics.Arcade.Sprite {
 
     applyDamage(bullet, scene) {
         if (bullet) {
-            this.health -= bullet.damage;
+            this.health -= bullet.projectile.damage;
             bullet.disableBody(true, true);
         } else {
             this.health = 0;

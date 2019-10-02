@@ -1,17 +1,9 @@
 import { ShipClass } from './config/ships/shipClass.mjs';
-import { Weapon } from './config/ships/weapon.mjs';
 
 export class ShipInstance {
   constructor(shipClass) {
     this.shipClass = shipClass;
     this.loadout = {};
-
-    // TODO temp
-    for (let hardpoint of this.shipClass.hardpoints) {
-      if (hardpoint.constructor.name == 'WeaponHardpoint') {
-        this.loadout[hardpoint.id] = new Weapon();
-      }
-    }
   }
 
   get key() {

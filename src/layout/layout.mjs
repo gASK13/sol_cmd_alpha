@@ -24,5 +24,15 @@ export class ShipLayout extends Phaser.Scene {
       self.scene.launch("mining-status", { player: self.player, configManager: self.configManager});
     });
 
+
+    // TODO temp
+    for (let hardpoint of this.player.shipInstance.shipClass.hardpoints) {
+      if (hardpoint.constructor.name == 'WeaponHardpoint') {
+        let w = hardpoint.maxClass == 2 ? this.configManager.weapons['medium_laser'] : this.configManager.weapons['basic_laser'];
+        this.player.shipInstance.loadout[hardpoint.id] = w;
+        this.add.sprite(300 + hardpoint.x, 300 + hardpoint.y, w.key).setRotation(hardpoint.angle);
+      }
+    }
+
   }
 }
