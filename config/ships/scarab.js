@@ -1,4 +1,5 @@
 export default {
+  id: 'scarab',
   name: "Scarab",
   maxHealth: 12,
   thrust: 100,

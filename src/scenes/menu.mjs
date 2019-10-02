@@ -32,7 +32,7 @@ export class Menu extends Phaser.Scene {
         let sx = 450;
         let sy = 400;
         let self = this;
-        for (let shp of this.configManager.ships) {
+        for (let shp of Object.values(this.configManager.ships)) {
             this.add.sprite(sx, sy, shp.key).setInteractive().on("pointerup", function() {
                 let player = new Player(0, shp);
                 self.scene.start("layout", { player: player, configManager: self.configManager});

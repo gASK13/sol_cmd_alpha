@@ -24,7 +24,7 @@ export class ConfigManager {
   loadWeapon(scene, weapon) {
     import(this.basePath + 'weapons/' + weapon + '.js')
     .then((module) => {
-        let wpClass = new Weapon(weapon, module.default);
+        let wpClass = new Weapon(module.default);
         this.loadSpritesheet(wpClass, scene);
         for(var projClass of wpClass.projectiles) {
           this.loadSpritesheet(projClass, scene);
@@ -36,7 +36,7 @@ export class ConfigManager {
   }
 
   loadShips(scene) {
-    this.ships = [];
+    this.ships = {};
     for (let ship of config.ships) {
       this.loading++;
       this.loadShip(scene, ship);
@@ -46,9 +46,9 @@ export class ConfigManager {
   loadShip(scene, ship) {
     import(this.basePath + 'ships/' + ship + '.js')
     .then((module) => {
-        let shipClass = new ShipClass(ship, module.default);
+        let shipClass = new ShipClass(module.default);
         this.loadSpritesheet(shipClass, scene);
-        this.ships.push(shipClass);
+        this.ships[shipClass.id] = shipClass;
         this.loading--;
         this.checkIfDone(scene);
     });

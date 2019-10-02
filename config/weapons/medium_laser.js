@@ -1,4 +1,5 @@
 export default {
+  id: 'laser_m',
   name: "20MW Laser",
   class: 2,
   description: "Bigger means better, right?",

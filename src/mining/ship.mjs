@@ -25,7 +25,7 @@ export class Ship extends Phaser.Physics.Arcade.Sprite {
 
         // TODO refactor?
         this.timers = {};
-        this.setDrag(0.975).setDamping(true).setMaxVelocity(this.shipInstance.maxSpeed);
+        this.setMaxVelocity(this.shipInstance.maxSpeed);
     }
 
     absorbDamage(damage) {

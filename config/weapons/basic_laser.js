@@ -1,4 +1,5 @@
 export default {
+  id: 'laser_s',
   name: "10MW Laser",
   class: 1,
   description: "Your basic anti-ship weapon. Well, anti-asteroid now, I guess?",

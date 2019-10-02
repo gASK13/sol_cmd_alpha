@@ -1,4 +1,5 @@
 export default {
+  id: 'stilleto',
   name: "Stilleto",
   maxHealth: 8,
   thrust: 500,

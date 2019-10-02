@@ -2,8 +2,8 @@ import {Hardpoint} from './hardpoints.mjs';
 
 export class ShipClass {
 
-  constructor(key, json) {
-    this.key = "ship_" + key;
+  constructor(json) {
+    this.id = json.id;
 
     // Load data
     this.maxHealth = json.maxHealth;
@@ -42,5 +42,9 @@ export class ShipClass {
       return this.hitbox.height;
     }
     return this.sprite.height;
+  }
+
+  get key() {
+    return this.id;
   }
 }
