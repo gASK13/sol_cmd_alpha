@@ -9,6 +9,10 @@ export class ConfigManager {
     this.callback = callback;
     this.loading = 0;
 
+    this.loadShips(scene);
+  }
+
+  loadShips(scene) {
     for (let ship of config.ships) {
       this.loading++;
       this.loadShip(scene, ship);
