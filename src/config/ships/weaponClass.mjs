@@ -3,7 +3,7 @@ import { ItemClass } from './itemClass.mjs';
 export class WeaponClass extends ItemClass {
   constructor(json) {
     super(json);
-    this.damage = json.damage;
+    this._damage = json.damage;
     this.delay = json.delay;
     this.velocity = json.velocity;
 
@@ -21,6 +21,10 @@ export class WeaponClass extends ItemClass {
 
   get type() {
     return 'w';
+  }
+
+  get damage() {
+    return this.convert(this._damage);
   }
 }
 

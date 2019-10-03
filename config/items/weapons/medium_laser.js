@@ -8,7 +8,7 @@ export default {
     width: 32,
     height: 48,
   },
-  damage: 4,
+  damage: { min: 3, max: {rnd: {min: 4, max: 6}}},
   velocity: 400,
   delay: 333,
   projectiles: [

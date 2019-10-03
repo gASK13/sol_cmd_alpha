@@ -4,6 +4,7 @@ export class Weapon extends Item {
   constructor(itemClass, configManager) {
     super(itemClass, configManager);
     this.projectiles = [];
+    this._damage = itemClass.damage;
     for (let wpc of itemClass.projectiles) {
       this.projectiles.push(new WeaponProjectile(configManager.projectiles[wpc.projectileClass], wpc, this));
     }
@@ -32,6 +33,26 @@ export class Weapon extends Item {
   getVelocityYModifier(angle) {
     return -Math.cos(angle);
   }
+
+  get tooltipText() {
+    return [this.name, "Damage: " + (this.projectiles.length > 1 ? this.projectiles.length + "x" : "") + this.damageText, "Fire rate: " + Math.round(1000/this.itemClass.delay, 2), this.itemClass.description]
+  }
+
+  get damage() {
+    if (this._damage.min && this._damage.max) {
+      return Phaser.Math.RND.between(this._damage.min, this._damage.max);
+    }
+
+    return this._damage;
+  }
+
+  get damageText() {
+    if (this._damage.min && this._damage.max) {
+      return this._damage.min + "-" + this._damage.max;
+    }
+
+    return this._damage;
+  }
 }
 
 class WeaponProjectile {
@@ -58,6 +79,6 @@ class WeaponProjectile {
   }
 
   get damage() {
-    return this.weapon.itemClass.damage;
+    return this.weapon.damage;
   }
 }

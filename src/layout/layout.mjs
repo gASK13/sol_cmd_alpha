@@ -11,7 +11,7 @@ export class ShipLayout extends Phaser.Scene {
     // Draw ship
     this.add.sprite(300, 300, this.player.shipInstance.key).setScale(5).setAlpha(0.35);
 
-    // Draw hardpoints
+    // Draw hardpoin0ts
     this.hardpoints = [];
     for(let hardpoint of this.player.shipInstance.shipClass.hardpoints) {
       var hp = this.add.sprite(300 + hardpoint.x, 300 + hardpoint.y, hardpoint.key).setRotation(hardpoint.angle);
@@ -98,7 +98,8 @@ export class ShipLayout extends Phaser.Scene {
 
   createTooltip(sprite) {
     var container = this.add.container(sprite.x - 20, sprite.y).setVisible(false);
-    container.add(this.add.text(0, 0, sprite.item.itemClass.name).setOrigin(1, 0.5));
+    console.log(sprite.item);
+    container.add(this.add.text(0, 0, sprite.item.tooltipText).setOrigin(1, 0.5));
     sprite.tooltip = container;
   }
 }
