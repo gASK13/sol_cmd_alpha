@@ -4,8 +4,8 @@ export class WeaponClass extends ItemClass {
   constructor(json) {
     super(json);
     this._damage = json.damage;
-    this.delay = json.delay;
-    this.velocity = json.velocity;
+    this._delay = json.delay;
+    this._velocity = json.velocity;
 
     this.loadProjectiles(this.id, json);
   }
@@ -25,6 +25,14 @@ export class WeaponClass extends ItemClass {
 
   get damage() {
     return this.convert(this._damage);
+  }
+
+  get delay() {
+    return this.convert(this._delay);
+  }
+
+  get velocity() {
+    return this.convert(this._velocity);
   }
 }
 

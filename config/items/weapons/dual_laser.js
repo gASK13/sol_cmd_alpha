@@ -8,9 +8,9 @@ export default {
     width: 32,
     height: 48,
   },
-  damage: 2,
+  damage: {rnd: { min: 1, max: 3}},
   velocity: 400,
-  delay: 200,
+  delay: { rnd: { min: 150, max: 250 }},
   projectiles: [
     {
         projectileClass: 'lsr_s',

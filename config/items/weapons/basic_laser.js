@@ -10,7 +10,7 @@ export default {
   },
   damage: 2,
   velocity: 400,
-  delay: 200,
+  delay: { rnd: { min: 150, max: 250}},
   projectiles: [
       {
         projectileClass: 'lsr_s',

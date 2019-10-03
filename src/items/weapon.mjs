@@ -5,6 +5,8 @@ export class Weapon extends Item {
     super(itemClass, configManager);
     this.projectiles = [];
     this._damage = itemClass.damage;
+    this._delay = itemClass.delay;
+    this._velocity = itemClass.velocity;
     for (let wpc of itemClass.projectiles) {
       this.projectiles.push(new WeaponProjectile(configManager.projectiles[wpc.projectileClass], wpc, this));
     }
@@ -17,12 +19,12 @@ export class Weapon extends Item {
         if (bullet) bullet.spawn(
             pShip.x + hardpoint.portX + projectile.weaponProjectileClass.offsetX,
             pShip.y + hardpoint.portY + projectile.weaponProjectileClass.offsetY,
-            pShip.body.velocity.x + this.getVelocityXModifier(hardpoint.angle + projectile.weaponProjectileClass.angle) * this.itemClass.velocity,
-            pShip.body.velocity.y + this.getVelocityYModifier(hardpoint.angle + projectile.weaponProjectileClass.angle) * this.itemClass.velocity,
+            pShip.body.velocity.x + this.getVelocityXModifier(hardpoint.angle + projectile.weaponProjectileClass.angle) * this._velocity,
+            pShip.body.velocity.y + this.getVelocityYModifier(hardpoint.angle + projectile.weaponProjectileClass.angle) * this._velocity,
             hardpoint.angle + projectile.weaponProjectileClass.angle,
             projectile);
       }
-      pShip.timers[hardpoint.id] = pShip.scene.time.now + this.itemClass.delay;
+      pShip.timers[hardpoint.id] = pShip.scene.time.now + this._delay;
     }
   }
 
@@ -35,7 +37,7 @@ export class Weapon extends Item {
   }
 
   get tooltipText() {
-    return [this.name, "Damage: " + (this.projectiles.length > 1 ? this.projectiles.length + "x" : "") + this.damageText, "Fire rate: " + Math.round(1000/this.itemClass.delay, 2), this.itemClass.description]
+    return [this.name, "Damage: " + (this.projectiles.length > 1 ? this.projectiles.length + "x" : "") + this.damageText, "Fire rate: " + Math.round(100000/this._delay)/100, this.itemClass.description]
   }
 
   get damage() {
