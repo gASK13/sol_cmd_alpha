@@ -16,9 +16,9 @@ export class Weapon extends Item {
         if (bullet) bullet.spawn(
             pShip.x + hardpoint.portX + projectile.weaponProjectileClass.offsetX,
             pShip.y + hardpoint.portY + projectile.weaponProjectileClass.offsetY,
-            pShip.body.velocity.x + this.getVelocityXModifier(hardpoint.angle) * this.itemClass.velocity,
-            pShip.body.velocity.y + this.getVelocityYModifier(hardpoint.angle) * this.itemClass.velocity,
-            hardpoint.angle,
+            pShip.body.velocity.x + this.getVelocityXModifier(hardpoint.angle + projectile.weaponProjectileClass.angle) * this.itemClass.velocity,
+            pShip.body.velocity.y + this.getVelocityYModifier(hardpoint.angle + projectile.weaponProjectileClass.angle) * this.itemClass.velocity,
+            hardpoint.angle + projectile.weaponProjectileClass.angle,
             projectile);
       }
       pShip.timers[hardpoint.id] = pShip.scene.time.now + this.itemClass.delay;

@@ -31,6 +31,7 @@ class WeaponClassProjectile {
     this.tint = json.tint;
     this._offsetX = json.offsetX;
     this._offsetY = json.offsetY;
+    this._angle = json.angle;
   }
 
   get offsetX() {
@@ -39,5 +40,9 @@ class WeaponClassProjectile {
 
   get offsetY() {
     return this._offsetY ? this._offsetY : 0;
+  }
+
+  get angle() {
+    return this._angle ? this._angle : 0;
   }
 }

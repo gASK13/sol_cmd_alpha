@@ -43,6 +43,9 @@ export class Menu extends Phaser.Scene {
                   new Weapon(self.configManager.weapons['laser_m'], self.configManager),
                   new Weapon(self.configManager.weapons['dual_laser'], self.configManager),
                   new Weapon(self.configManager.weapons['dual_laser'], self.configManager),
+                  new Weapon(self.configManager.weapons['laser_shotgun'], self.configManager),
+                  new Weapon(self.configManager.weapons['laser_shotgun'], self.configManager),
+                  new Weapon(self.configManager.weapons['laser_shotgun'], self.configManager),
                   new Item(self.configManager.items['dampener'], self.configManager)
                 ]);
                 self.scene.start("layout", { player: player, configManager: self.configManager});
