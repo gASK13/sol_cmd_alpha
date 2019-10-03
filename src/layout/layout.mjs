@@ -49,9 +49,8 @@ export class ShipLayout extends Phaser.Scene {
         object.setRotation(object.originalA);
         object.setTint(0xffffff);
         for (var hp of self.hardpoints) {
-          console.log(x + "/" + y);
           if(hp.getBounds().contains(x,y)) {
-            if (hp.hardpoint.constructor.name == 'WeaponHardpoint' && hp.hardpoint.maxClass >= object.item.class) {
+            if (hp.hardpoint.accepts(object.item.itemClass)) {
               object.x = hp.x;
               object.y = hp.y;
               object.setRotation(hp.hardpoint.angle);
@@ -66,7 +65,7 @@ export class ShipLayout extends Phaser.Scene {
         object.setTint(0xffffff);
         for (var hp of self.hardpoints) {
           if(hp.getBounds().contains(object.x,object.y)) {
-            if (hp.hardpoint.constructor.name == 'WeaponHardpoint' && hp.hardpoint.maxClass >= object.item.class) {
+            if (hp.hardpoint.accepts(object.item.itemClass)) {
               object.x = hp.x;
               object.y = hp.y;
               object.setRotation(hp.hardpoint.angle);

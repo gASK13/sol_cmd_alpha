@@ -1,28 +1,11 @@
-import { Projectile } from './projectile.mjs';
-
-export class Weapon {
-  constructor(json) {
-    this.id = json.id;
-    this.name = json.name;
-    this.description = json.description;
-    this.class = json.class;
-    this.loadProjectiles(this.id, json);
-
-    //TODO
-    this.sprite = json.sprite;
-  }
-
-  loadProjectiles(id, json) {
-    this.projectiles = [];
-    if (json.projectiles) {
-      for (var pJson of json.projectiles) {
-          this.projectiles.push(new Projectile(id + "." + pJson.id, pJson));
-      }
-    }
+import {Item} from './item.mjs';
+export class Weapon extends Item {
+  constructor(itemClass) {
+    super(itemClass);
   }
 
   fire(hardpoint, bullets, pShip) {
-    for (let projectile of this.projectiles) {
+    for (let projectile of this.itemClass.projectiles) {
       if (!pShip.timers[hardpoint.id + projectile.id] || pShip.timers[hardpoint.id + projectile.id] < pShip.scene.time.now ) {
         let bullet = bullets.get();
         if (bullet) bullet.spawn(
@@ -43,9 +26,5 @@ export class Weapon {
 
   getVelocityYModifier(angle) {
     return -Math.cos(angle);
-  }
-
-  get key() {
-    return this.id;
   }
 }

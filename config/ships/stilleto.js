@@ -37,7 +37,8 @@ export default {
     {
       x: 0,
       y: 25,
-      id: 'm'
+      id: 'm',
+      maxClass: 1
     }
   ]
 }

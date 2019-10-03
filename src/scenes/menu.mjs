@@ -1,5 +1,6 @@
 import {Player} from '../player.mjs';
-
+import {Weapon} from '../items/weapon.mjs';
+import {Item} from '../items/item.mjs';
 /*
     Menu class - placeholder for now, so I can prove I can do it.
 */
@@ -35,7 +36,13 @@ export class Menu extends Phaser.Scene {
         for (let shp of Object.values(this.configManager.ships)) {
             this.add.sprite(sx, sy, shp.key).setInteractive().on("pointerup", function() {
                 let player = new Player(0, shp,
-                  [self.configManager.weapons['laser_s'], self.configManager.weapons['laser_s'], self.configManager.weapons['laser_s'], self.configManager.weapons['laser_m'], self.configManager.weapons['laser_m']]);
+                  [new Weapon(self.configManager.weapons['laser_s']),
+                  new Weapon(self.configManager.weapons['laser_s']),
+                  new Weapon(self.configManager.weapons['laser_s']),
+                  new Weapon(self.configManager.weapons['laser_m']),
+                  new Weapon(self.configManager.weapons['laser_m']),
+                  new Item(self.configManager.items['dampener'])
+                ]);
                 self.scene.start("layout", { player: player, configManager: self.configManager});
             });
             this.add.text(sx, sy+50, shp.name).setOrigin(0.5,0.5).setFontSize(15).setColor("white");

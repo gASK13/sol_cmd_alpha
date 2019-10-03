@@ -3,6 +3,8 @@ export class Hardpoint {
     this.x = json.x;
     this.y = json.y;
     this.id = json.id;
+    this.maxClass = json.maxClass;
+    this.acceptTypes = json.acceptTypes;
   }
 
   static create(json) {
@@ -15,14 +17,21 @@ export class Hardpoint {
   }
 
   get key() {
-    return 'h1';
+    return 'h' + this.maxClass;
+  }
+
+  accepts(itemClass) {
+    return (this.acceptTypes ? this.acceptTypes : this.defaultAccepts).indexOf(itemClass.type) > -1 && itemClass.class <= this.maxClass;
+  }
+
+  get defaultAccepts() {
+    return ['i'];
   }
 }
 
 export class WeaponHardpoint extends Hardpoint {
   constructor(json) {
     super(json);
-    this.maxClass = json.maxClass;
     this.portX = json.portX;
     this.portY = json.portY;
     this._angle = json.angle;
@@ -34,5 +43,9 @@ export class WeaponHardpoint extends Hardpoint {
 
   get key() {
     return 'w' + this.maxClass;
+  }
+
+  get defaultAccepts() {
+    return ['w'];
   }
 }

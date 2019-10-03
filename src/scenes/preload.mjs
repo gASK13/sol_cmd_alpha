@@ -22,9 +22,6 @@ export class Preload extends Phaser.Scene {
     this.loadingText.setFontSize(30);
     this.loadingText.setColor("blue");
 
-    // LOAD LSR
-    this.load.image('laser', 'assets/lsr.png');
-
     // LOAD AS(S)
     this.load.image('ass', 'assets/ass.png');
     this.load.image('ass_1', 'assets/ass_1.png');
