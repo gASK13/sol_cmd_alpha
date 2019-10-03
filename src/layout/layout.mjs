@@ -84,13 +84,16 @@ export class ShipLayout extends Phaser.Scene {
             object.y = hp.y;
             object.setRotation(hp.hardpoint.angle);
             self.player.shipInstance.loadout[hp.hardpoint.id] = object.item;
+            if (object.getBounds().contains(pointer.x, pointer.y)) {
+              object.tooltip.setVisible(true);
+            }
             return;
           }
         }
       }
       object.x = object.originalX;
       object.y = object.originalY;
-      if (object.getBounds().containst(pointer.x, pointer.y)) {
+      if (object.getBounds().contains(pointer.x, pointer.y)) {
         object.tooltip.setVisible(true);
       }
     });

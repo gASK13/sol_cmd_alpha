@@ -31,7 +31,7 @@ export class Ship extends Phaser.Physics.Arcade.Sprite {
     absorbDamage(damage) {
         let dmg = damage;
 
-        if (this.shield > 0) {
+        if (this.shield && this.shield > 0) {
             dmg -= this.shield;
             this.shield = dmg < 0 ? -dmg : 0;
             this.nextRecharge = this.scene.time.now + (this.shield == 0 ? this.shipInstance.shieldRestart : this.shipInstance.shieldRecharge);

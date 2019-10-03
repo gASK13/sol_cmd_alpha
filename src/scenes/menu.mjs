@@ -30,7 +30,7 @@ export class Menu extends Phaser.Scene {
         text.setOrigin(0.5, 0.5);
         text.setFontSize(30);
 
-        let sx = 450;
+        let sx = 400;
         let sy = 400;
         let self = this;
         for (let shp of Object.values(this.configManager.ships)) {
