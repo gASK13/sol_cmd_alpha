@@ -1,14 +1,14 @@
-export class Projectile {
-  constructor(key, json) {
-    this.key = key;
+export class ProjectileClass {
+  constructor(json) {
     this.id = json.id;
     this.hitbox = json.hitbox;
-    this.damage = json.damage;
-    this.delay = json.delay;
-    this.velocity = json.velocity;
 
     // TODO sprite
     this.sprite = json.sprite;
+  }
+
+  get key() {
+    return this.id;
   }
 
   get width() {

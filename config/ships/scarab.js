@@ -40,8 +40,7 @@ export default {
       maxClass: 1,
       id: 'f_w',
       portX: 0,
-      portY: -35,
-      acceptTypes: ['w', 'i']
+      portY: -35
     },
     {
       x: 0,

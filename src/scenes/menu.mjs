@@ -36,12 +36,14 @@ export class Menu extends Phaser.Scene {
         for (let shp of Object.values(this.configManager.ships)) {
             this.add.sprite(sx, sy, shp.key).setInteractive().on("pointerup", function() {
                 let player = new Player(0, shp,
-                  [new Weapon(self.configManager.weapons['laser_s']),
-                  new Weapon(self.configManager.weapons['laser_s']),
-                  new Weapon(self.configManager.weapons['laser_s']),
-                  new Weapon(self.configManager.weapons['laser_m']),
-                  new Weapon(self.configManager.weapons['laser_m']),
-                  new Item(self.configManager.items['dampener'])
+                  [new Weapon(self.configManager.weapons['laser_s'], self.configManager),
+                  new Weapon(self.configManager.weapons['laser_s'], self.configManager),
+                  new Weapon(self.configManager.weapons['laser_s'], self.configManager),
+                  new Weapon(self.configManager.weapons['laser_m'], self.configManager),
+                  new Weapon(self.configManager.weapons['laser_m'], self.configManager),
+                  new Weapon(self.configManager.weapons['dual_laser'], self.configManager),
+                  new Weapon(self.configManager.weapons['dual_laser'], self.configManager),
+                  new Item(self.configManager.items['dampener'], self.configManager)
                 ]);
                 self.scene.start("layout", { player: player, configManager: self.configManager});
             });

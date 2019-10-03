@@ -2,6 +2,7 @@ import { default as config } from '../../config/config.js';
 import { ShipClass } from './ships/shipClass.mjs';
 import { ItemClass } from './ships/itemClass.mjs';
 import { WeaponClass } from './ships/weaponClass.mjs';
+import { ProjectileClass } from './ships/projectileClass.mjs';
 
 export class ConfigManager {
   basePath = "../../config/";
@@ -10,9 +11,18 @@ export class ConfigManager {
     this.callback = callback;
     this.loading = 0;
 
+    this.loadProjectiles(scene);
     this.loadShips(scene);
     this.loadWeapons(scene);
     this.loadItems(scene);
+  }
+
+  loadProjectiles(scene) {
+    this.projectiles = {};
+    for (let proj of config.projectiles) {
+      this.loading++;
+      this.loadProjectile(scene, proj);
+    }
   }
 
   loadItems(scene) {
@@ -36,9 +46,6 @@ export class ConfigManager {
     .then((module) => {
         let wpClass = new WeaponClass(module.default);
         this.loadSpritesheet(wpClass, scene);
-        for(var projClass of wpClass.projectiles) {
-          this.loadSpritesheet(projClass, scene);
-        }
         this.weapons[wpClass.id] = wpClass;
         this.loading--;
         this.checkIfDone(scene);
@@ -51,6 +58,17 @@ export class ConfigManager {
         let iClass = new ItemClass(module.default);
         this.loadSpritesheet(iClass, scene);
         this.items[iClass.id] = iClass;
+        this.loading--;
+        this.checkIfDone(scene);
+    });
+  }
+
+  loadProjectile(scene, proj) {
+    import(this.basePath + 'projectiles/' + proj + '.js')
+    .then((module) => {
+        let pClass = new ProjectileClass(module.default);
+        this.loadSpritesheet(pClass, scene);
+        this.projectiles[pClass.id] = pClass;
         this.loading--;
         this.checkIfDone(scene);
     });

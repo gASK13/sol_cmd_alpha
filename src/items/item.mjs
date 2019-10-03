@@ -1,5 +1,5 @@
 export class Item {
-  constructor(itemClass) {
+  constructor(itemClass, configManager) {
     this.itemClass = itemClass;
   }
 

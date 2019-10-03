@@ -235,7 +235,7 @@ class Asteroid extends Phaser.Physics.Arcade.Sprite {
 
     applyDamage(bullet, scene) {
         if (bullet) {
-            this.health -= bullet.projectile.damage;
+            this.health -= bullet.damage;
             bullet.disableBody(true, true);
         } else {
             this.health = 0;

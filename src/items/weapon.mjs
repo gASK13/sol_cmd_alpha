@@ -1,22 +1,27 @@
 import {Item} from './item.mjs';
+
 export class Weapon extends Item {
-  constructor(itemClass) {
-    super(itemClass);
+  constructor(itemClass, configManager) {
+    super(itemClass, configManager);
+    this.projectiles = [];
+    for (let wpc of itemClass.projectiles) {
+      this.projectiles.push(new WeaponProjectile(configManager.projectiles[wpc.projectileClass], wpc, this));
+    }
   }
 
   fire(hardpoint, bullets, pShip) {
-    for (let projectile of this.itemClass.projectiles) {
-      if (!pShip.timers[hardpoint.id + projectile.id] || pShip.timers[hardpoint.id + projectile.id] < pShip.scene.time.now ) {
+    if (!pShip.timers[hardpoint.id] || pShip.timers[hardpoint.id] < pShip.scene.time.now ) {
+      for (let projectile of this.projectiles) {
         let bullet = bullets.get();
         if (bullet) bullet.spawn(
-            pShip.x + hardpoint.portX,
-            pShip.y + hardpoint.portY,
-            pShip.body.velocity.x + this.getVelocityXModifier(hardpoint.angle) * projectile.velocity,
-            pShip.body.velocity.y + projectile.velocity * this.getVelocityYModifier(hardpoint.angle),
+            pShip.x + hardpoint.portX + projectile.weaponProjectileClass.offsetX,
+            pShip.y + hardpoint.portY + projectile.weaponProjectileClass.offsetY,
+            pShip.body.velocity.x + this.getVelocityXModifier(hardpoint.angle) * this.itemClass.velocity,
+            pShip.body.velocity.y + this.getVelocityYModifier(hardpoint.angle) * this.itemClass.velocity,
             hardpoint.angle,
             projectile);
-        pShip.timers[hardpoint.id + projectile.id] = pShip.scene.time.now + projectile.delay;
       }
+      pShip.timers[hardpoint.id] = pShip.scene.time.now + this.itemClass.delay;
     }
   }
 
@@ -26,5 +31,33 @@ export class Weapon extends Item {
 
   getVelocityYModifier(angle) {
     return -Math.cos(angle);
+  }
+}
+
+class WeaponProjectile {
+  constructor(projectileClass, weaponProjectileClass, weapon) {
+    this.projectileClass = projectileClass;
+    this.weaponProjectileClass = weaponProjectileClass;
+    this.weapon = weapon;
+  }
+
+  get key() {
+    return this.projectileClass.key;
+  }
+
+  get height() {
+    return this.projectileClass.height;
+  }
+
+  get width() {
+    return this.projectileClass.width;
+  }
+
+  get tint() {
+    return this.weaponProjectileClass.tint;
+  }
+
+  get damage() {
+    return this.weapon.itemClass.damage;
   }
 }

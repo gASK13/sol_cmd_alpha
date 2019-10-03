@@ -8,17 +8,13 @@ export default {
     width: 32,
     height: 48,
   },
+  damage: 4,
+  velocity: 400,
+  delay: 333,
   projectiles: [
     {
-      id: "l",
-      sprite: {
-        image: "assets/lsr_m.png",
-        width: 4,
-        height: 32
-      },
-      damage: 4,
-      velocity: 400,
-      delay: 333
+        projectileClass: 'lsr_m',
+        tint: 0x00afaf
     }
   ]
 }
